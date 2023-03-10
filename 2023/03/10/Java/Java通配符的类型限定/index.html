@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java 字段不参与多态性 | Checo的小博客</title>
+  <title>Java 通配符类型的限定 | Checo的小博客</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java 字段不参与多态性 | Checo的小博客">
+  <meta name="description" content="Java 通配符类型的限定 | Checo的小博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Java核心技术卷Ⅰ有一句话：带有超类型的限定的通配符允许你写入一个泛型对象，而带有子类型限定的通配符允许你读取一个泛型对象(Wildcards with supertype bounds let you write to a generic object, while wildcards with subtype bounds let you read from a generic object">
 <meta property="og:type" content="article">
@@ -259,9 +259,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Java/Java字段不参与多态性" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/Java通配符的类型限定" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Java 字段不参与多态性</h1>
+        <h1 class="article-title">Java 通配符类型的限定</h1>
     
     <div class="article-meta">
         
@@ -279,7 +279,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2022-12-09 16:48:50'>2022-11-06 00:00</time>
+            发布时间 : <time class="date" title='最后更新: 2023-03-10 19:33:40'>2023-03-10 00:00</time>
         
     </div>
     <div class="article-meta">
@@ -301,7 +301,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-text">两个例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%80%EF%BC%9A"><span class="toc-text">例子一：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%BA%8C%EF%BC%9A"><span class="toc-text">例子二：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E4%B8%8D%E5%8F%82%E4%B8%8E%E5%A4%9A%E6%80%81%E6%80%A7"><span class="toc-text">字段不参与多态性</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#extends-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9E%8BT%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E8%8C%83%E5%9B%B4"><span class="toc-text">? extends T表示任何实现类型T的子类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#super-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E7%B1%BB%E5%9E%8BT%E7%9A%84%E7%88%B6%E7%B1%BB%E8%8C%83%E5%9B%B4"><span class="toc-text">? super T表示任何类型T的父类范围</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -317,68 +317,53 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="两个例子"><a href="#两个例子" class="headerlink" title="两个例子"></a>两个例子</h3><h4 id="例子一："><a href="#例子一：" class="headerlink" title="例子一："></a>例子一：</h4><ul>
-<li><p>父类：</p>
-<pre><code class="java">public class Father &#123;
-    int age;
-        
-    public Father() &#123;
-        age = 50;
+        <p>Java核心技术卷Ⅰ有一句话：带有超类型的限定的通配符允许你写入一个泛型对象，而带有子类型限定的通配符允许你读取一个泛型对象(Wildcards with supertype bounds let you write to a generic object, while wildcards with subtype bounds let you read from a generic object)</p>
+<p>这句话怎么理解呢？</p>
+<p>假定有如下定义：</p>
+<pre><code class="java">// 人类
+public class Person &#123;
+&#125;
+
+// 学生类
+public class Student extends Person &#123;
+&#125;
+
+// 建筑类
+public class Building&lt;T&gt; &#123;
+    private T person;
+
+    public Building() &#123;
+    &#125;
+
+    public Building(T person) &#123;
+        this.person = person;
+    &#125;
+
+    public T getPerson() &#123;
+        return person;
+    &#125;
+
+    public void setPerson(T person) &#123;
+        this.person = person;
     &#125;
 &#125;
 </code></pre>
-</li>
-<li><p>子类：</p>
-<pre><code class="java">public class Son extends Father &#123;
-    public Son() &#123;
-        age = 25;
-    &#125;
-&#125;
+<h3 id="extends-T表示任何实现类型T的子类型范围"><a href="#extends-T表示任何实现类型T的子类型范围" class="headerlink" title="? extends T表示任何实现类型T的子类型范围"></a>? extends T表示任何实现类型T的子类型范围</h3><pre><code class="java">Building&lt;? extends Person&gt; building = new Building&lt;&gt;();
+// 编译错误，类型不兼容
+building.setPerson(new Student());
+// 允许
+Person person = building.getPerson();
 </code></pre>
-</li>
-<li><p>多态的创建子类，看看年龄到底是多少：</p>
-<pre><code class="java">public class FieldHasNoPolymorphic &#123;
-    public static void main(String[] args) &#123;
-        Father guy = new Son();
-        System.out.println(&quot;This guy&#39;s age is &quot; + guy.age);
-    &#125;
-&#125;
+<p>因为 <code>building</code> 的类型参数是任何实现了 <code>Person</code> 类的子类，所以 <code>building</code> 可能是 <code>building&lt;Teacher&gt;</code>，也可能是 <code>building&lt;Student&gt;</code>，编译器并不知道可能传入的类型参数是什么，所以拒绝添加</p>
+<p>但是你可以从中得到一个 <code>Person</code> 类型的对象，因为你得到的对象类型一定是 <code>Person</code> 类的子类</p>
+<h3 id="super-T表示任何类型T的父类范围"><a href="#super-T表示任何类型T的父类范围" class="headerlink" title="? super T表示任何类型T的父类范围"></a>? super T表示任何类型T的父类范围</h3><pre><code class="java">Building&lt;? super Student&gt; classroom = new Building&lt;&gt;();
+// 允许
+classroom.setPerson(new Student());
+// 只能读取为 Object 类型
+Object person = classroom.getPerson();
 </code></pre>
-</li>
-</ul>
-<blockquote>
-<p>例子一的输出：<code>This guy&#39;s age is 25</code></p>
-</blockquote>
-<p>很合理对吧？毕竟以前学Java SE的时候，不管是视频还是书里，都是说编译看左边，运行看右边，即父类变量的引用( <code>guy</code> )指向了子类对象( <code>Son</code> )，那么代码访问子类的年龄，自然是输出 <code>25</code></p>
-<h4 id="例子二："><a href="#例子二：" class="headerlink" title="例子二："></a>例子二：</h4><ul>
-<li><p>父类：同例子一</p>
-</li>
-<li><p>子类：</p>
-<pre><code class="java">public class Son extends Father &#123;
-    // 跟例子一相比多声明了一个父类同名字段
-    int age;
-        ...
-&#125;
-</code></pre>
-</li>
-<li><p>同样是多态的创建子类，看看年龄是多少：</p>
-<pre><code class="java">public class FieldHasNoPolymorphic &#123;
-    public static void main(String[] args) &#123;
-        Father guy = new Son();
-        System.out.println(&quot;This guy&#39;s age is &quot; + guy.age);
-    &#125;
-&#125;
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p>例子二的输出：<code>This guy&#39;s age is 50</code></p>
-</blockquote>
-<p>奇怪，明明在子类构造方法中给子类 <code>age</code> 初始化为了 <code>25</code> ，怎么输出是 <code>50</code> ？</p>
-<h3 id="字段不参与多态性"><a href="#字段不参与多态性" class="headerlink" title="字段不参与多态性"></a>字段不参与多态性</h3><blockquote>
-<p>字段永远不会参与多态，当子类声明父类的同名字段时，虽然在子类的内存中两个字段都会存在，但是子类的字段会遮蔽父类的同名字段</p>
-</blockquote>
-<p>什么意思呢？假设将在父类继承而来的 <code>age</code> 字段叫做 <code>ageF</code> ，而子类中声明的 <code>age</code> 字段叫做 <code>ageS</code> ，虽然内存中这两个字段都会存在，但是子类的字段遮蔽了父类的同名字段，所以子类的构造方法中实际上是对 <code>ageS</code> 进行了初始化，但是通过多态创建的子类对象时，<code>guy.age</code> 访问的却是 <code>ageF</code> ，这就是为什么例子二的年龄输出是 <code>50</code> 而不是 <code>25</code>。</p>
+<p>你可以往 <code>classroom</code> 里添加学生，因为 <code>classroom</code> 的类型参数一定是学生类的父类，父类引用指向子类对象是没有问题的</p>
+<p>但是你从 <code>classroom</code> 取出元素时，并不知道具体的父类是什么，唯一能保证的是Java中所有类的超类 <code>Object</code>，所以你只能从中取出 <code>Object</code> 类型的元素</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
