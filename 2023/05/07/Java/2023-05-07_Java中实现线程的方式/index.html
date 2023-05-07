@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java 通配符类型的限定 | Checo的小博客</title>
+  <title>Java中实现线程的方式 | Checo的小博客</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java 通配符类型的限定 | Checo的小博客">
+  <meta name="description" content="Java中实现线程的方式 | Checo的小博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Java 中实现线程的方式有两种：继承 Thread 类和实现 Runnable 接口使用继承 Thread 类的方式实现线程public class MyThread extends Thread &amp;#123;     @Override     public void run() &amp;#123;         &#x2F;&#x2F; 线程执行的逻辑         System.out.println(&amp;quo">
 <meta property="og:type" content="article">
@@ -286,9 +286,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Java/2023-03-10_Java通配符的类型限定" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/2023-05-07_Java中实现线程的方式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Java 通配符类型的限定</h1>
+        <h1 class="article-title">Java中实现线程的方式</h1>
     
     <div class="article-meta">
         
@@ -306,7 +306,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-05-06 18:29:59'>2023-03-10 15:22</time>
+            发布时间 : <time class="date" title='最后更新: 2023-05-07 18:28:12'>2023-05-07 18:18</time>
         
     </div>
     <div class="article-meta">
@@ -328,7 +328,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#extends-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9E%8BT%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E8%8C%83%E5%9B%B4"><span class="toc-text">? extends T表示任何实现类型T的子类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#super-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E7%B1%BB%E5%9E%8BT%E7%9A%84%E7%88%B6%E7%B1%BB%E8%8C%83%E5%9B%B4"><span class="toc-text">? super T表示任何类型T的父类范围</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9C%89%E4%B8%A4%E7%A7%8D%EF%BC%9A%E7%BB%A7%E6%89%BF-Thread-%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0-Runnable-%E6%8E%A5%E5%8F%A3"><span class="toc-text">Java 中实现线程的方式有两种：继承 Thread 类和实现 Runnable 接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%BB%A7%E6%89%BF-Thread-%E7%B1%BB%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B"><span class="toc-text">使用继承 Thread 类的方式实现线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AE%9E%E7%8E%B0-Runnable-%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B"><span class="toc-text">使用实现 Runnable 接口的方式实现线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Executors-%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%EF%BC%9F"><span class="toc-text">Executors 是怎么实现线程的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-text">结论</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -344,55 +344,40 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>Java核心技术卷Ⅰ有一句话：带有超类型的限定的通配符允许你写入一个泛型对象，而带有子类型限定的通配符允许你读取一个泛型对象（Wildcards with supertype bounds let you write to a generic object, while wildcards with subtype bounds let you read from a generic object）</p>
-</blockquote>
-<p>这句话怎么理解呢？</p>
-<p>假定有如下定义：</p>
-<pre><code class="java">// 人类
-public class Person &#123;
+        <h2 id="Java-中实现线程的方式有两种：继承-Thread-类和实现-Runnable-接口"><a href="#Java-中实现线程的方式有两种：继承-Thread-类和实现-Runnable-接口" class="headerlink" title="Java 中实现线程的方式有两种：继承 Thread 类和实现 Runnable 接口"></a>Java 中实现线程的方式有两种：继承 <code>Thread</code> 类和实现 <code>Runnable</code> 接口</h2><h3 id="使用继承-Thread-类的方式实现线程"><a href="#使用继承-Thread-类的方式实现线程" class="headerlink" title="使用继承 Thread 类的方式实现线程"></a>使用继承 Thread 类的方式实现线程</h3><pre><code class="java">public class MyThread extends Thread &#123;
+    @Override
+    public void run() &#123;
+        // 线程执行的逻辑
+        System.out.println(&quot;Hello, I am a thread!&quot;);
+    &#125;
 &#125;
 
-// 学生类
-public class Student extends Person &#123;
-&#125;
-
-// 建筑类
-public class Building&lt;T&gt; &#123;
-    private T person;
-
-    public Building() &#123;
-    &#125;
-
-    public Building(T person) &#123;
-        this.person = person;
-    &#125;
-
-    public T getPerson() &#123;
-        return person;
-    &#125;
-
-    public void setPerson(T person) &#123;
-        this.person = person;
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        MyThread thread = new MyThread();
+        thread.start();
     &#125;
 &#125;
 </code></pre>
-<h3 id="extends-T表示任何实现类型T的子类型范围"><a href="#extends-T表示任何实现类型T的子类型范围" class="headerlink" title="? extends T表示任何实现类型T的子类型范围"></a>? extends T表示任何实现类型T的子类型范围</h3><pre><code class="java">Building&lt;? extends Person&gt; building = new Building&lt;&gt;();
-// 编译错误，类型不兼容
-building.setPerson(new Student());
-// 允许
-Person person = building.getPerson();
+<h3 id="使用实现-Runnable-接口的方式实现线程"><a href="#使用实现-Runnable-接口的方式实现线程" class="headerlink" title="使用实现 Runnable 接口的方式实现线程"></a>使用实现 Runnable 接口的方式实现线程</h3><p>这里需要注意的是在使用实现 <code>Runnable</code> 接口的方式实现线程时，确实需要创建一个 <code>Thread</code> 对象来启动线程，但这并不意味着 Java 实现线程的本质只有一种方式，因为 <code>Thread</code> 类本质上只是一个线程执行的容器。</p>
+<pre><code class="java">public class MyRunnable implements Runnable &#123;
+    @Override
+    public void run() &#123;
+        // 线程执行的逻辑
+        System.out.println(&quot;Hello, I am a thread!&quot;);
+    &#125;
+&#125;
+
+public class Main &#123;
+    public static void main(String[] args) &#123;
+        MyRunnable runnable = new MyRunnable();
+        Thread thread = new Thread(runnable);
+        thread.start();
+    &#125;
+&#125;
 </code></pre>
-<p>因为 <code>building</code> 的类型参数是任何实现了 <code>Person</code> 类的子类，所以 <code>building</code> 可能是 <code>building&lt;Teacher&gt;</code>，也可能是 <code>building&lt;Student&gt;</code>，编译器并不知道可能传入的类型参数是什么，所以拒绝添加</p>
-<p>但是你可以从中得到一个 <code>Person</code> 类型的对象，因为你得到的对象类型一定是 <code>Person</code> 类的子类</p>
-<h3 id="super-T表示任何类型T的父类范围"><a href="#super-T表示任何类型T的父类范围" class="headerlink" title="? super T表示任何类型T的父类范围"></a>? super T表示任何类型T的父类范围</h3><pre><code class="java">Building&lt;? super Student&gt; classroom = new Building&lt;&gt;();
-// 允许
-classroom.setPerson(new Student());
-// 只能读取为 Object 类型
-Object person = classroom.getPerson();
-</code></pre>
-<p>你可以往 <code>classroom</code> 里添加学生，因为 <code>classroom</code> 的类型参数一定是学生类的父类，父类引用指向子类对象是没有问题的</p>
-<p>但是你从 <code>classroom</code> 取出元素时，并不知道具体的父类是什么，唯一能保证的是Java中所有类的超类 <code>Object</code>，所以你只能从中取出 <code>Object</code> 类型的元素</p>
+<h3 id="Executors-是怎么实现线程的？"><a href="#Executors-是怎么实现线程的？" class="headerlink" title="Executors 是怎么实现线程的？"></a>Executors 是怎么实现线程的？</h3><p><code>Executors</code> 使用的是实现 <code>Runnable</code> 接口的方式实现线程，它提供了一种方便的方式来创建和管理线程池，可以使用 <code>Executors</code> 工厂方法创建不同类型的线程池。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>使用实现 <code>Runnable</code> 接口的方式实现线程更加灵活，因为它可以避免单继承的限制，同时也可以更好地实现线程池等高级特性。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

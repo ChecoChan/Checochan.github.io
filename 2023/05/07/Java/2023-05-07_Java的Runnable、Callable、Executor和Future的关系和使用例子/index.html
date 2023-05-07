@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java 通配符类型的限定 | Checo的小博客</title>
+  <title>Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子 | Checo的小博客</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java 通配符类型的限定 | Checo的小博客">
+  <meta name="description" content="Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子 | Checo的小博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Java 中实现线程的方式有两种：继承 Thread 类和实现 Runnable 接口使用继承 Thread 类的方式实现线程public class MyThread extends Thread &amp;#123;     @Override     public void run() &amp;#123;         &#x2F;&#x2F; 线程执行的逻辑         System.out.println(&amp;quo">
 <meta property="og:type" content="article">
@@ -286,9 +286,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Java/2023-03-10_Java通配符的类型限定" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/2023-05-07_Java的Runnable、Callable、Executor和Future的关系和使用例子" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Java 通配符类型的限定</h1>
+        <h1 class="article-title">Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子</h1>
     
     <div class="article-meta">
         
@@ -306,7 +306,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-05-06 18:29:59'>2023-03-10 15:22</time>
+            发布时间 : <time class="date" title='最后更新: 2023-05-07 18:10:31'>2023-05-07 17:28</time>
         
     </div>
     <div class="article-meta">
@@ -328,7 +328,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#extends-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9E%8BT%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E8%8C%83%E5%9B%B4"><span class="toc-text">? extends T表示任何实现类型T的子类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#super-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E7%B1%BB%E5%9E%8BT%E7%9A%84%E7%88%B6%E7%B1%BB%E8%8C%83%E5%9B%B4"><span class="toc-text">? super T表示任何类型T的父类范围</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable%E3%80%81Callable%E3%80%81Executor-%E5%92%8C-Future-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">Runnable、Callable、Executor 和 Future 的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable%E3%80%81Callable%E3%80%81Executor-%E5%92%8C-Future-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90"><span class="toc-text">Runnable、Callable、Executor 和 Future 的使用例子</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -344,55 +344,115 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>Java核心技术卷Ⅰ有一句话：带有超类型的限定的通配符允许你写入一个泛型对象，而带有子类型限定的通配符允许你读取一个泛型对象（Wildcards with supertype bounds let you write to a generic object, while wildcards with subtype bounds let you read from a generic object）</p>
-</blockquote>
-<p>这句话怎么理解呢？</p>
-<p>假定有如下定义：</p>
-<pre><code class="java">// 人类
-public class Person &#123;
+        <p>学了 Java 的多线程这几个接口后呢，可能还很多人傻傻分不清楚这几个接口之间到底是什么关系，有什么区别，分别有什么作用，本文简单介绍一下</p>
+<h3 id="Runnable、Callable、Executor-和-Future-的关系"><a href="#Runnable、Callable、Executor-和-Future-的关系" class="headerlink" title="Runnable、Callable、Executor 和 Future 的关系"></a>Runnable、Callable、Executor 和 Future 的关系</h3><ol>
+<li><p><code>Runnable</code> 接口：是 Java 中的一个标准接口，用于描述一个可运行的任务。通过实现 <code>Runnable</code> 接口并重写 <code>run</code> 方法，可以定义一个线程要执行的任务内容，本身不支持返回值或抛出受检异常。</p>
+</li>
+<li><p><code>Callable</code> 接口：与 <code>Runnable</code> 接口类似，也是一个标准接口，但是它可以返回一个值或者抛出一个异常。通过实现 <code>Callable</code> 接口并重写 <code>call</code> 方法，可以定义一个线程要执行的任务内容，并返回一个结果。</p>
+</li>
+<li><p><code>Executor</code> 接口：是一个线程池管理接口，定义了线程池的执行方式和行为。通过实现 <code>Executor</code> 接口并重写 <code>execute</code> 方法，可以自定义线程池的执行策略。可以通过 <code>Executors</code> 中的静态工厂方法之一来创建线程池。</p>
+</li>
+<li><p><code>Future</code> 接口：表示一个异步计算的结果，可以通过 <code>get</code> 方法获取计算结果。<code>Future</code> 接口可以用于在任务执行完成之前，先返回一个 <code>Future</code> 对象，然后在需要结果时再通过 <code>get</code> 方法获取结果。</p>
+</li>
+</ol>
+<h3 id="Runnable、Callable、Executor-和-Future-的使用例子"><a href="#Runnable、Callable、Executor-和-Future-的使用例子" class="headerlink" title="Runnable、Callable、Executor 和 Future 的使用例子"></a>Runnable、Callable、Executor 和 Future 的使用例子</h3><ol>
+<li><p>使用 <code>Runnable</code> 和 <code>Executor</code>实现一个打印 10 个数的任务</p>
+<pre><code class="java"> // ExecutorService 接口扩展了 Executor 接口
+ ExecutorService executor = Executors.newSingleThreadExecutor();
+
+ // 定义线程要执行的任务内容
+ Runnable task = new Runnable() &#123;
+     @Override
+     public void run() &#123;
+         for (int i = 1; i &lt;= 10; i++) &#123;
+             System.out.println(i);
+         &#125;
+     &#125;
+ &#125;;
+
+ // 提交任务给 ExecutorService 执行
+ executor.execute(task);
+ // 关闭 ExecutorService，释放线程池资源
+ executor.shutdown();
+</code></pre>
+</li>
+<li><p>使用 <code>Callable</code> 和 <code>Executor</code> 实现一个求 1 到 100 的和的任务，并输出结果</p>
+<pre><code class="java">// ExecutorService 接口扩展了 Executor 接口
+ExecutorService executor = Executors.newSingleThreadExecutor();
+
+// 定义线程要执行的任务内容
+Callable&lt;Integer&gt; task = new Callable&lt;Integer&gt;() &#123;
+    @Override
+    public Integer call() throws Exception &#123;
+        int sum = 0;
+        for (int i = 1; i &lt;= 100; i++) &#123;
+            sum += i;
+        &#125;
+        return sum;
+    &#125;
+&#125;;
+
+// 提交任务，获取任务执行返回的 Future 对象
+Future&lt;Integer&gt; future = executor.submit(task);
+// 通过 Future 对象获取任务执行的结果
+System.out.println(&quot;Result: &quot; + future.get());
+// 关闭 ExecutorService，释放线程池资源
+executor.shutdown();
+</code></pre>
+</li>
+<li><p>使用 <code>Executor</code> 和 <code>Future</code> 实现一个异步任务，返回一个结果</p>
+<pre><code class="java">// ExecutorService 接口扩展了 Executor 接口
+ExecutorService executor = Executors.newSingleThreadExecutor();
+
+// 提交任务
+Future&lt;String&gt; future = executor.submit(() -&gt; &#123;
+    // 模拟任务执行要 5 秒钟
+    Thread.sleep(5000);
+    return &quot;Hello, World!&quot;;
+&#125;);
+
+// 每秒中循环检查提交的任务是否执行完毕
+while (!future.isDone()) &#123;
+    System.out.println(&quot;Waiting for the asynchronous task to complete...&quot;);
+    Thread.sleep(1000);
 &#125;
 
-// 学生类
-public class Student extends Person &#123;
+// 输出执行结果
+System.out.println(&quot;Result: &quot; + future.get());
+// 关闭ExecutorService，释放线程池资源
+executor.shutdown();
+</code></pre>
+</li>
+<li><p>使用 <code>Executor</code> 和 <code>Future</code> 处理一批任务</p>
+<pre><code class="java">// 创建一个 ExecutorService，它会管理线程池
+ExecutorService executor = Executors.newFixedThreadPool(5);
+
+// 创建一批 Callable 任务
+List&lt;Callable&lt;Integer&gt;&gt; tasks = new ArrayList&lt;&gt;();
+for (int i = 0; i &lt; 10; i++) &#123;
+    int finalI = i;
+    // 每个任务返回一个数字 i
+    Callable&lt;Integer&gt; task = () -&gt; &#123;
+        // 模拟任务执行需要 1 秒钟
+        Thread.sleep(1000);
+        return finalI;
+    &#125;;
+    tasks.add(task);
 &#125;
 
-// 建筑类
-public class Building&lt;T&gt; &#123;
-    private T person;
+// 提交一批任务给 ExecutorService 并获取一个 Future 列表
+List&lt;Future&lt;Integer&gt;&gt; futures = executor.invokeAll(tasks);
 
-    public Building() &#123;
-    &#125;
-
-    public Building(T person) &#123;
-        this.person = person;
-    &#125;
-
-    public T getPerson() &#123;
-        return person;
-    &#125;
-
-    public void setPerson(T person) &#123;
-        this.person = person;
-    &#125;
+// 遍历 Future 列表，并在每个 Future 对象上调用 get 方法以获取任务执行结果
+for (Future&lt;Integer&gt; future : futures) &#123;
+    System.out.println(&quot;Task_&quot; + future.get() + &quot;: &quot; + future.get());
 &#125;
+
+// 关闭 ExecutorService，释放线程池资源
+executor.shutdown();
 </code></pre>
-<h3 id="extends-T表示任何实现类型T的子类型范围"><a href="#extends-T表示任何实现类型T的子类型范围" class="headerlink" title="? extends T表示任何实现类型T的子类型范围"></a>? extends T表示任何实现类型T的子类型范围</h3><pre><code class="java">Building&lt;? extends Person&gt; building = new Building&lt;&gt;();
-// 编译错误，类型不兼容
-building.setPerson(new Student());
-// 允许
-Person person = building.getPerson();
-</code></pre>
-<p>因为 <code>building</code> 的类型参数是任何实现了 <code>Person</code> 类的子类，所以 <code>building</code> 可能是 <code>building&lt;Teacher&gt;</code>，也可能是 <code>building&lt;Student&gt;</code>，编译器并不知道可能传入的类型参数是什么，所以拒绝添加</p>
-<p>但是你可以从中得到一个 <code>Person</code> 类型的对象，因为你得到的对象类型一定是 <code>Person</code> 类的子类</p>
-<h3 id="super-T表示任何类型T的父类范围"><a href="#super-T表示任何类型T的父类范围" class="headerlink" title="? super T表示任何类型T的父类范围"></a>? super T表示任何类型T的父类范围</h3><pre><code class="java">Building&lt;? super Student&gt; classroom = new Building&lt;&gt;();
-// 允许
-classroom.setPerson(new Student());
-// 只能读取为 Object 类型
-Object person = classroom.getPerson();
-</code></pre>
-<p>你可以往 <code>classroom</code> 里添加学生，因为 <code>classroom</code> 的类型参数一定是学生类的父类，父类引用指向子类对象是没有问题的</p>
-<p>但是你从 <code>classroom</code> 取出元素时，并不知道具体的父类是什么，唯一能保证的是Java中所有类的超类 <code>Object</code>，所以你只能从中取出 <code>Object</code> 类型的元素</p>
+</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
