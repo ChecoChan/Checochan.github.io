@@ -306,7 +306,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-05-06 19:18:31'>2023-05-06 18:25</time>
+            发布时间 : <time class="date" title='最后更新: 2023-09-15 17:18:15'>2023-05-06 18:25</time>
         
     </div>
     <div class="article-meta">
@@ -399,7 +399,9 @@ table
 </li>
 <li><p>接口：接口只能使用 <code>public</code> 访问权限修饰符</p>
 </li>
-<li><p>类中的方法：类中的方法可以使用 <code>private</code> 、缺省、<code>protected</code> 和 <code>public</code> 这四种访问权限修饰符。</p>
+<li><p>普通类中的方法：类中的方法可以使用 <code>private</code> 、缺省、<code>protected</code> 和 <code>public</code> 这四种访问权限修饰符。</p>
+</li>
+<li><p>抽象类中的普通方法可以使用的权限修饰符和跟普通类中的方法一样，抽象类中的抽象方法，可以使用缺省、<code>protected</code> 和 <code>public</code> 这三种访问权限修饰符，抽象方法不可使用 <code>private</code> 修饰</p>
 </li>
 <li><p>接口中的方法：接口中的方法只能使用 <code>public</code> 访问权限修饰符，即使不写访问权限修饰符，默认也是 <code>public</code>。顺便一提，接口中 <code>default</code> 修饰的方法，它是 Java 8 新增的特性，使得接口中可以有默认实现的方法，这样实现类就不必强制实现这些方法了，主要帮助接口演化。使用 <code>default</code> 修饰符的方法是 <code>public</code> 的。值得注意的是，在 Java 9 中，接口方法被允许可以是 <code>private</code> 的，但是私有方法只能在接口本身访问，作用有限。</p>
 </li>
