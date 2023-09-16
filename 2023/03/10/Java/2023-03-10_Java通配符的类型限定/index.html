@@ -306,7 +306,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-05-06 18:29:59'>2023-03-10 15:22</time>
+            发布时间 : <time class="date" title='最后更新: 2023-09-16 23:03:17'>2023-03-10 15:22</time>
         
     </div>
     <div class="article-meta">
@@ -328,7 +328,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#extends-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9E%8BT%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E8%8C%83%E5%9B%B4"><span class="toc-text">? extends T表示任何实现类型T的子类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#super-T%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E7%B1%BB%E5%9E%8BT%E7%9A%84%E7%88%B6%E7%B1%BB%E8%8C%83%E5%9B%B4"><span class="toc-text">? super T表示任何类型T的父类范围</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#extends-T-%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9E%8B-T-%E7%9A%84%E5%AD%90%E7%B1%BB%E5%9E%8B%E8%8C%83%E5%9B%B4"><span class="toc-text">? extends T 表示任何实现类型 T 的子类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#super-T-%E8%A1%A8%E7%A4%BA%E4%BB%BB%E4%BD%95%E7%B1%BB%E5%9E%8B-T-%E7%9A%84%E7%88%B6%E7%B1%BB%E8%8C%83%E5%9B%B4"><span class="toc-text">? super T 表示任何类型 T 的父类范围</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -377,7 +377,7 @@ public class Building&lt;T&gt; &#123;
     &#125;
 &#125;
 </code></pre>
-<h3 id="extends-T表示任何实现类型T的子类型范围"><a href="#extends-T表示任何实现类型T的子类型范围" class="headerlink" title="? extends T表示任何实现类型T的子类型范围"></a>? extends T表示任何实现类型T的子类型范围</h3><pre><code class="java">Building&lt;? extends Person&gt; building = new Building&lt;&gt;();
+<h3 id="extends-T-表示任何实现类型-T-的子类型范围"><a href="#extends-T-表示任何实现类型-T-的子类型范围" class="headerlink" title="? extends T 表示任何实现类型 T 的子类型范围"></a><code>? extends T</code> 表示任何实现类型 <code>T</code> 的子类型范围</h3><pre><code class="java">Building&lt;? extends Person&gt; building = new Building&lt;&gt;();
 // 编译错误，类型不兼容
 building.setPerson(new Student());
 // 允许
@@ -385,7 +385,7 @@ Person person = building.getPerson();
 </code></pre>
 <p>因为 <code>building</code> 的类型参数是任何实现了 <code>Person</code> 类的子类，所以 <code>building</code> 可能是 <code>building&lt;Teacher&gt;</code>，也可能是 <code>building&lt;Student&gt;</code>，编译器并不知道可能传入的类型参数是什么，所以拒绝添加</p>
 <p>但是你可以从中得到一个 <code>Person</code> 类型的对象，因为你得到的对象类型一定是 <code>Person</code> 类的子类</p>
-<h3 id="super-T表示任何类型T的父类范围"><a href="#super-T表示任何类型T的父类范围" class="headerlink" title="? super T表示任何类型T的父类范围"></a>? super T表示任何类型T的父类范围</h3><pre><code class="java">Building&lt;? super Student&gt; classroom = new Building&lt;&gt;();
+<h3 id="super-T-表示任何类型-T-的父类范围"><a href="#super-T-表示任何类型-T-的父类范围" class="headerlink" title="? super T 表示任何类型 T 的父类范围"></a><code>? super T</code> 表示任何类型 <code>T</code> 的父类范围</h3><pre><code class="java">Building&lt;? super Student&gt; classroom = new Building&lt;&gt;();
 // 允许
 classroom.setPerson(new Student());
 // 只能读取为 Object 类型
