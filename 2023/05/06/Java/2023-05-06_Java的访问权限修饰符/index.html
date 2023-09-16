@@ -306,7 +306,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-09-15 17:18:15'>2023-05-06 18:25</time>
+            发布时间 : <time class="date" title='最后更新: 2023-09-16 21:04:29'>2023-05-06 18:25</time>
         
     </div>
     <div class="article-meta">
@@ -395,7 +395,12 @@ table
 <ol>
 <li><p>外部类：外部类只能使用<code>private</code> 或缺省这两种访问权限修饰符，且同一个 <code>.java</code> 文件中只允许存在一个  <code>public</code> 的类。</p>
 </li>
-<li><p>内部类：内部类的访问权限比较特殊，内部类可以访问外部类的所有成员变量和方法，而且内部类的访问权限与其所在的外部类的访问权限没有关系。内部类可以使用 <code>private</code> 、缺省、<code>protected</code> 和 <code>public</code> 这四种访问权限修饰符。</p>
+<li><p>内部类：内部类的访问权限比较特殊，要分成几类来看</p>
+<ul>
+<li>成员内部类：成员内部类的访问权限与其所在的外部类的访问权限没有关系。成员内部类可以使用 <code>private</code> 、缺省、<code>protected</code> 和 <code>public</code> 这四种访问权限修饰符。</li>
+<li>局部内部类：声明局部内部类不能有权限修饰符，局部内部类的作用域被限定在声明这个局部类的块中</li>
+<li>匿名内部类：没有权限修饰符</li>
+</ul>
 </li>
 <li><p>接口：接口只能使用 <code>public</code> 访问权限修饰符</p>
 </li>
