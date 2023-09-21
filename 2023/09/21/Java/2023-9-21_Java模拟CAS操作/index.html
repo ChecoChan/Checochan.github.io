@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子 | Checo的小博客</title>
+  <title>Java模拟CAS操作 | Checo的小博客</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子 | Checo的小博客">
+  <meta name="description" content="Java模拟CAS操作 | Checo的小博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="在 Java 中模拟 CAS(Compare-And-Swap) 操作CAS 基本概念科普：几乎所有的现代处理器中都包含了某种形式的原子读—改—写指令，例如比较并交换(Compare-And-Swap)，操作系统和 JVM 使用这些指令来实现锁和并发的数据结构。 CAS指令包含三个操作数，需要读写的内存地址V，进行比较的旧值A和新值B，当且仅当V中存储的值等于A时，CAS才会通过原子的方式用B值更">
 <meta property="og:type" content="article">
@@ -295,9 +295,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Java/2023-05-07_Java的Runnable、Callable、Executor和Future的关系和使用例子" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Java/2023-9-21_Java模拟CAS操作" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子</h1>
+        <h1 class="article-title">Java模拟CAS操作</h1>
     
     <div class="article-meta">
         
@@ -315,7 +315,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-09-21 13:07:35'>2023-05-07 17:28</time>
+            发布时间 : <time class="date" title='最后更新: 2023-09-21 16:52:19'>2023-09-21 16:48</time>
         
     </div>
     <div class="article-meta">
@@ -337,7 +337,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable%E3%80%81Callable%E3%80%81Executor-%E5%92%8C-Future-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">Runnable、Callable、Executor 和 Future 的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Runnable%E3%80%81Callable%E3%80%81Executor-%E5%92%8C-Future-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90"><span class="toc-text">Runnable、Callable、Executor 和 Future 的使用例子</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-Java-%E4%B8%AD%E6%A8%A1%E6%8B%9F-CAS-Compare-And-Swap-%E6%93%8D%E4%BD%9C"><span class="toc-text">在 Java 中模拟 CAS(Compare-And-Swap) 操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CAS-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E7%A7%91%E6%99%AE%EF%BC%9A"><span class="toc-text">CAS 基本概念科普：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java-%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%8B%9F-CAS-%E6%93%8D%E4%BD%9C"><span class="toc-text">Java 代码模拟 CAS 操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS-%E7%B1%BB"><span class="toc-text">CAS 类:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%EF%BC%9A"><span class="toc-text">测试：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C%EF%BC%9A"><span class="toc-text">结果：</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -353,78 +353,66 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>学了 Java 的多线程这几个接口后呢，可能还很多人傻傻分不清楚这几个接口之间到底是什么关系，有什么区别，分别有什么作用，本文简单介绍一下</p>
-<h3 id="Runnable、Callable、Executor-和-Future-的关系"><a href="#Runnable、Callable、Executor-和-Future-的关系" class="headerlink" title="Runnable、Callable、Executor 和 Future 的关系"></a><code>Runnable</code>、<code>Callable</code>、<code>Executor</code> 和 <code>Future</code> 的关系</h3><ol>
-<li><p><code>Runnable</code> 接口：是 Java 中的一个标准接口，用于描述一个可运行的任务。通过实现 <code>Runnable</code> 接口并重写 <code>run</code> 方法，可以定义一个线程要执行的任务内容，本身不支持返回值或抛出受检异常。</p>
-</li>
-<li><p><code>Callable</code> 接口：与 <code>Runnable</code> 接口类似，也是一个标准接口，但是它可以返回一个值或者抛出一个异常。通过实现 <code>Callable</code> 接口并重写 <code>call</code> 方法，可以定义一个线程要执行的任务内容，并返回一个结果。</p>
-</li>
-<li><p><code>Executor</code> 接口：是一个线程池管理接口，定义了线程池的执行方式和行为。通过实现 <code>Executor</code> 接口并重写 <code>execute</code> 方法，可以自定义线程池的执行策略。可以通过 <code>Executors</code> 中的静态工厂方法之一来创建线程池。</p>
-</li>
-<li><p><code>Future</code> 接口：表示一个异步计算的结果，可以通过 <code>get</code> 方法获取计算结果。<code>Future</code> 接口可以用于在任务执行完成之前，先返回一个 <code>Future</code> 对象，然后在需要结果时再通过 <code>get</code> 方法获取结果。</p>
-</li>
-</ol>
-<h3 id="Runnable、Callable、Executor-和-Future-的使用例子"><a href="#Runnable、Callable、Executor-和-Future-的使用例子" class="headerlink" title="Runnable、Callable、Executor 和 Future 的使用例子"></a><code>Runnable</code>、<code>Callable</code>、<code>Executor</code> 和 <code>Future</code> 的使用例子</h3><ol>
-<li><p>使用 <code>Runnable</code> 和 <code>Executor</code>实现一个打印 10 个数的任务</p>
-<pre><code class="java"> public class Main &#123;
-     public static void main(String[] args) throws ExecutionException, InterruptedException &#123;
-         ExecutorService service = Executors.newSingleThreadExecutor(); // ExecutorService 接口扩展了 Executor 接口
-         Runnable r = () -&gt; &#123;
-             for (int i = 1; i &lt;= 10; i++) &#123;
-                 System.out.println(i);
-             &#125;
-         &#125;;
-         service.execute(r);
-         service.shutdown(); // 关闭 ExecutorService，释放线程池资源
-     &#125;
- &#125;
-</code></pre>
-</li>
-<li><p>使用 <code>Callable</code> 和 <code>Executor</code> 实现一个求 1 到 10 的和的任务，并输出结果</p>
-<pre><code class="java">public class Main &#123;
-    public static void main(String[] args) throws ExecutionException, InterruptedException &#123;
-        ExecutorService service = Executors.newSingleThreadExecutor(); // ExecutorService 接口扩展了 Executor 接口
-        Callable task = () -&gt; &#123;
-            int sum = 0;
-            for (int i = 1; i &lt;= 10; i++)
-                sum += i;
-            return sum;
-        &#125;;
-        Future&lt;Integer&gt; future = service.submit(task);
-        System.out.println(&quot;1 + 2 + ... + 10 = &quot; + future.get());
-        service.shutdown(); // 关闭 ExecutorService，释放线程池资源
+        <h2 id="在-Java-中模拟-CAS-Compare-And-Swap-操作"><a href="#在-Java-中模拟-CAS-Compare-And-Swap-操作" class="headerlink" title="在 Java 中模拟 CAS(Compare-And-Swap) 操作"></a>在 Java 中模拟 CAS(Compare-And-Swap) 操作</h2><h3 id="CAS-基本概念科普："><a href="#CAS-基本概念科普：" class="headerlink" title="CAS 基本概念科普："></a>CAS 基本概念科普：</h3><p>几乎所有的现代处理器中都包含了某种形式的原子读—改—写指令，例如比较并交换(Compare-And-Swap)，操作系统和 JVM 使用这些指令来实现锁和并发的数据结构。</p>
+<p>CAS指令包含三个操作数，需要读写的内存地址V，进行比较的旧值A和新值B，当且仅当V中存储的值等于A时，CAS才会通过原子的方式用B值更新V中存储的值，否则不会执行任何操作。</p>
+<p>无论V中存储的值等不等于A，都将返回V中现在存储的值，这种变化形式被称为比较并设置(Compare-And-Set)，无论操作是否成功都会返回</p>
+<h3 id="Java-代码模拟-CAS-操作"><a href="#Java-代码模拟-CAS-操作" class="headerlink" title="Java 代码模拟 CAS 操作"></a>Java 代码模拟 CAS 操作</h3><h4 id="CAS-类"><a href="#CAS-类" class="headerlink" title="CAS 类:"></a>CAS 类:</h4><pre><code class="java">/**
+ * 模拟 CAS 操作
+ */
+public class SimulatedCAS &#123;
+    private int value;
+
+    public SimulatedCAS(int value) &#123; this.value = value; &#125;
+
+    public synchronized  int get() &#123; return value; &#125;
+
+    public synchronized int compareAndSwap(int expectedValue, int newValue) &#123;
+        int oldValue = value;
+        if (oldValue == expectedValue)
+            value = newValue;
+        return oldValue;
+    &#125;
+
+    public synchronized boolean compareAndSet(int expectedValue, int newValue) &#123;
+        return (expectedValue == compareAndSwap(expectedValue, newValue));
     &#125;
 &#125;
 </code></pre>
-</li>
-<li><p>使用 <code>Executor</code> 和 <code>Future</code> 处理一批任务</p>
-<pre><code class="java">public class Main &#123;
+<h4 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h4><pre><code class="java">public class Main &#123;
     public static void main(String[] args) throws ExecutionException, InterruptedException &#123;
-        ExecutorService executor = Executors.newFixedThreadPool(5);
-        // 创建一批 Callable 任务
-        List&lt;Callable&lt;Integer&gt;&gt; taskList = new ArrayList&lt;&gt;();
+        SimulatedCAS cas = new SimulatedCAS(1); // 初始化 CAS 类中的值为 1
+        // 开启 10 个线程竞争 CAS 操作，并且使用闭锁使得所有的线程同时开始执行
+        CountDownLatch startGate = new CountDownLatch(1);
         for (int i = 0; i &lt; 10; i++) &#123;
-            int finalI = i;
-            Callable&lt;Integer&gt; task = () -&gt; &#123;
-                Thread.sleep(1000); // 模拟任务执行需要 1 秒钟
-                return finalI;
-            &#125;;
-            taskList.add(task);
-        &#125;
+            Thread t = new Thread(() -&gt; &#123;
+                try &#123;
+                    startGate.await();
+                    // 将 CAS 中存储的值修改为 2
+                    if (cas.compareAndSet(1, 2)) System.out.println(Thread.currentThread().getName() + &quot; cas succeed&quot;);
+                    else System.out.println(Thread.currentThread().getName() + &quot; cas failed&quot;);
+                &#125; catch (InterruptedException e) &#123;
+                    throw new RuntimeException(e);
+                &#125;
 
-        // 提交一批任务给 ExecutorService 并获取一个 Future 列表
-        List&lt;Future&lt;Integer&gt;&gt; futures = executor.invokeAll(taskList);
-        // 遍历 Future 列表，并在每个 Future 对象上调用 get 方法以获取任务执行结果
-        for (Future&lt;Integer&gt; future : futures) &#123;
-            System.out.println(&quot;Task_&quot; + future.get() + &quot;: &quot; + future.get());
+            &#125;);
+            t.start();
         &#125;
-
-        executor.shutdown(); // 关闭 ExecutorService，释放线程池资源
+        startGate.countDown(); // 使得 10 个线程同时开始竞争 CAS 操作
     &#125;
 &#125;
 </code></pre>
-</li>
-</ol>
+<h4 id="结果："><a href="#结果：" class="headerlink" title="结果："></a>结果：</h4><pre><code>Thread-6 cas succeed
+Thread-7 cas failed
+Thread-9 cas failed
+Thread-4 cas failed
+Thread-3 cas failed
+Thread-1 cas failed
+Thread-5 cas failed
+Thread-2 cas failed
+Thread-8 cas failed
+Thread-0 cas failed
+</code></pre>
+<p>可以看到，10 个同时开始 CAS 操作的线程，只有一个会成功，其他都失败，多跑几次，成功的线程可能都是不同的。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
