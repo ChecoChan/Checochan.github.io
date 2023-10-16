@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java 字段不参与多态性 | Checo的小博客</title>
+  <title>MyBatis Plus延迟加载 | Checo的小博客</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java 字段不参与多态性 | Checo的小博客">
+  <meta name="description" content="MyBatis Plus延迟加载 | Checo的小博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：DROP TABLE IF EXISTS &#96;order&#96;; CREATE TABLE &#96;order&#96; (   &#96;id&#96; int NOT NULL">
 <meta property="og:type" content="article">
@@ -318,9 +318,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-Java/2022-11-06_Java字段不参与多态性" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-MyBaits/2023-10-16_MyBatis Plus延迟加载" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Java 字段不参与多态性</h1>
+        <h1 class="article-title">MyBatis Plus延迟加载</h1>
     
     <div class="article-meta">
         
@@ -330,7 +330,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Java">Java</a>
+            <a  data-rel="MyBais">MyBais</a>
             
         </span>
         
@@ -338,7 +338,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-05-06 18:29:42'>2022-11-06 21:45</time>
+            发布时间 : <time class="date" title='最后更新: 2023-10-16 18:19:30'>2023-10-16 18:02</time>
         
     </div>
     <div class="article-meta">
@@ -360,7 +360,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-text">两个例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%80%EF%BC%9A"><span class="toc-text">例子一：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%BA%8C%EF%BC%9A"><span class="toc-text">例子二：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E4%B8%8D%E5%8F%82%E4%B8%8E%E5%A4%9A%E6%80%81%E6%80%A7"><span class="toc-text">字段不参与多态性</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MyBatis-Plus%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD"><span class="toc-text">MyBatis Plus延迟加载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MyBatis-Plus%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%EF%BC%9A"><span class="toc-text">MyBatis Plus延迟加载：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%87%E8%AE%BE%E6%9C%89%E4%B8%A4%E4%B8%AA%E7%94%A8%E6%88%B7%E8%A1%A8-order-%E5%92%8C-user%EF%BC%9A"><span class="toc-text">假设有两个用户表 order 和 user：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93%E7%B1%BB-Order-%E5%92%8C-User%EF%BC%9A"><span class="toc-text">实体类 Order 和 User：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mapper%E6%8E%A5%E5%8F%A3%EF%BC%9A"><span class="toc-text">Mapper接口：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%EF%BC%8C%E8%AE%A9%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0-SQL-%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97%EF%BC%9A"><span class="toc-text">添加配置，让我们可以看到 SQL 执行日志：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%EF%BC%9A"><span class="toc-text">测试延迟加载：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%EF%BC%9A"><span class="toc-text">运行结果：</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -376,68 +376,98 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="两个例子"><a href="#两个例子" class="headerlink" title="两个例子"></a>两个例子</h3><h4 id="例子一："><a href="#例子一：" class="headerlink" title="例子一："></a>例子一：</h4><ul>
-<li><p>父类：</p>
-<pre><code class="java">public class Father &#123;
-    int age;
-        
-    public Father() &#123;
-        age = 50;
+        <h2 id="MyBatis-Plus延迟加载"><a href="#MyBatis-Plus延迟加载" class="headerlink" title="MyBatis Plus延迟加载"></a>MyBatis Plus延迟加载</h2><h3 id="MyBatis-Plus延迟加载："><a href="#MyBatis-Plus延迟加载：" class="headerlink" title="MyBatis Plus延迟加载："></a>MyBatis Plus延迟加载：</h3><p>MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。</p>
+<h4 id="假设有两个用户表-order-和-user："><a href="#假设有两个用户表-order-和-user：" class="headerlink" title="假设有两个用户表 order 和 user："></a>假设有两个用户表 <code>order</code> 和 <code>user</code>：</h4><pre><code class="sql">DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `order_content` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_000_ai_ci;
+INSERT INTO `order` VALUES (1,1,&#39;computer&#39;),(2,1,&#39;phone&#39;);
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+INSERT INTO `user` VALUES (1,&#39;Jack&#39;);
+</code></pre>
+<h4 id="实体类-Order-和-User："><a href="#实体类-Order-和-User：" class="headerlink" title="实体类 Order 和 User："></a>实体类 <code>Order</code> 和 <code>User</code>：</h4><pre><code class="java">@Data
+@TableName(value =&quot;order&quot;)
+public class Order implements Serializable &#123;
+    private Integer id;
+    private Integer userId;
+    private String orderContent;
+&#125;
+
+@Data
+@TableName(value =&quot;user&quot;)
+public class User implements Serializable &#123;
+    private Integer id;
+    private String name;
+    @TableField(exist = false)
+    private List&lt;Order&gt; orderList;
+&#125;
+</code></pre>
+<h4 id="Mapper接口："><a href="#Mapper接口：" class="headerlink" title="Mapper接口："></a>Mapper接口：</h4><pre><code class="java">@Mapper
+public interface OrderMapper extends BaseMapper&lt;Order&gt; &#123;
+    @Select(&quot;select o.id, o.user_id, o.order_content from `order` o where user_id = #&#123;userId&#125;&quot;)
+    List&lt;Order&gt; getOrderListByUserId(@Param(&quot;userId&quot;) Integer userId);
+&#125;
+
+@Mapper
+public interface UserMapper extends BaseMapper&lt;User&gt; &#123;
+    @Select(&quot;select u.id, u.name from `user` u where id = #&#123;id&#125;&quot;)
+    @Results(&#123;
+            @Result(property = &quot;orderList&quot;,
+                    column = &quot;id&quot;,
+                    javaType = List.class,
+                    many = @Many(select = &quot;com.checo.mapper.OrderMapper.getOrderListByUserId&quot;,
+                            fetchType = FetchType.LAZY)) // fetchType = FetchType.LAZY 即开启延迟加载
+    &#125;)
+    User getUserById(@Param(&quot;id&quot;) Integer id);
+&#125;
+</code></pre>
+<h4 id="添加配置，让我们可以看到-SQL-执行日志："><a href="#添加配置，让我们可以看到-SQL-执行日志：" class="headerlink" title="添加配置，让我们可以看到 SQL 执行日志："></a>添加配置，让我们可以看到 SQL 执行日志：</h4><pre><code class="yaml">mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+</code></pre>
+<h4 id="测试延迟加载："><a href="#测试延迟加载：" class="headerlink" title="测试延迟加载："></a>测试延迟加载：</h4><pre><code class="java">@SpringBootTest
+class SpringBootDemoApplicationTests &#123;
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void testMyBatisPlusLazy() &#123;
+        User jack = userMapper.getUserById(1);
+        System.out.println(jack.getName());
+        System.out.println(&quot;--------------&quot;);
+        List&lt;Order&gt; orderList = jack.getOrderList();
+        System.out.println(orderList);
     &#125;
 &#125;
 </code></pre>
-</li>
-<li><p>子类：</p>
-<pre><code class="java">public class Son extends Father &#123;
-    public Son() &#123;
-        age = 25;
-    &#125;
-&#125;
+<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><pre><code>==&gt;  Preparing: select u.id, u.name from `user` u where id = ?
+==&gt; Parameters: 1(Integer)
+&lt;==    Columns: id, name
+&lt;==        Row: 1, Jack
+&lt;==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@149b0577]
+Jack
+------- 分割线 -------
+JDBC Connection [HikariProxyConnection@993343057 wrapping com.mysql.cj.jdbc.ConnectionImpl@5ec1963c] will not be managed by Spring
+==&gt;  Preparing: select o.id, o.user_id, o.order_content from `order` o where user_id = ?
+==&gt; Parameters: 1(Integer)
+&lt;==    Columns: id, user_id, order_content
+&lt;==        Row: 1, 1, computer
+&lt;==        Row: 2, 1, phone
+&lt;==      Total: 2
+[Order(id=1, userId=1, orderContent=computer), Order(id=2, userId=1, orderContent=phone)]
 </code></pre>
-</li>
-<li><p>多态的创建子类，看看年龄到底是多少：</p>
-<pre><code class="java">public class FieldHasNoPolymorphic &#123;
-    public static void main(String[] args) &#123;
-        Father guy = new Son();
-        System.out.println(&quot;This guy&#39;s age is &quot; + guy.age);
-    &#125;
-&#125;
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p>例子一的输出：<code>This guy&#39;s age is 25</code></p>
-</blockquote>
-<p>很合理对吧？毕竟以前学Java SE的时候，不管是视频还是书里，都是说编译看左边，运行看右边，即父类变量的引用( <code>guy</code> )指向了子类对象( <code>Son</code> )，那么代码访问子类的年龄，自然是输出 <code>25</code></p>
-<h4 id="例子二："><a href="#例子二：" class="headerlink" title="例子二："></a>例子二：</h4><ul>
-<li><p>父类：同例子一</p>
-</li>
-<li><p>子类：</p>
-<pre><code class="java">public class Son extends Father &#123;
-    // 跟例子一相比多声明了一个父类同名字段
-    int age;
-    ...
-&#125;
-</code></pre>
-</li>
-<li><p>同样是多态的创建子类，看看年龄是多少：</p>
-<pre><code class="java">public class FieldHasNoPolymorphic &#123;
-    public static void main(String[] args) &#123;
-        Father guy = new Son();
-        System.out.println(&quot;This guy&#39;s age is &quot; + guy.age);
-    &#125;
-&#125;
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p>例子二的输出：<code>This guy&#39;s age is 50</code></p>
-</blockquote>
-<p>奇怪，明明在子类构造方法中给子类 <code>age</code> 初始化为了 <code>25</code> ，怎么输出是 <code>50</code> ？</p>
-<h3 id="字段不参与多态性"><a href="#字段不参与多态性" class="headerlink" title="字段不参与多态性"></a>字段不参与多态性</h3><blockquote>
-<p>字段永远不会参与多态，当子类声明父类的同名字段时，虽然在子类的内存中两个字段都会存在，但是子类的字段会遮蔽父类的同名字段</p>
-</blockquote>
-<p>什么意思呢？假设将在父类继承而来的 <code>age</code> 字段叫做 <code>ageF</code> ，而子类中声明的 <code>age</code> 字段叫做 <code>ageS</code> ，虽然内存中这两个字段都会存在，但是子类的字段遮蔽了父类的同名字段，所以子类的构造方法中实际上是对 <code>ageS</code> 进行了初始化，但是通过多态创建的子类对象时，<code>guy.age</code> 访问的却是 <code>ageF</code> ，这就是为什么例子二的年龄输出是 <code>50</code> 而不是 <code>25</code>。</p>
+<p>可以看出，在执行 <code>jack.getOrderList()</code> 时，才执行的订单查询，即实现了延迟加载。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
