@@ -338,7 +338,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-09-16 23:03:17'>2023-03-10 15:22</time>
+            发布时间 : <time class="date" title='最后更新: 2023-11-10 10:27:54'>2023-03-10 15:22</time>
         
     </div>
     <div class="article-meta">
@@ -380,51 +380,27 @@
 <p>Java核心技术卷Ⅰ有一句话：带有超类型的限定的通配符允许你写入一个泛型对象，而带有子类型限定的通配符允许你读取一个泛型对象（Wildcards with supertype bounds let you write to a generic object, while wildcards with subtype bounds let you read from a generic object）</p>
 </blockquote>
 <p>这句话怎么理解呢？</p>
-<p>假定有如下定义：</p>
-<pre><code class="java">// 人类
+<p>假定有两个类：</p>
+<pre><code class="java">/* 人类 */
 public class Person &#123;
 &#125;
 
-// 学生类
+/* 学生类 */
 public class Student extends Person &#123;
 &#125;
-
-// 建筑类
-public class Building&lt;T&gt; &#123;
-    private T person;
-
-    public Building() &#123;
-    &#125;
-
-    public Building(T person) &#123;
-        this.person = person;
-    &#125;
-
-    public T getPerson() &#123;
-        return person;
-    &#125;
-
-    public void setPerson(T person) &#123;
-        this.person = person;
-    &#125;
-&#125;
 </code></pre>
-<h3 id="extends-T-表示任何实现类型-T-的子类型范围"><a href="#extends-T-表示任何实现类型-T-的子类型范围" class="headerlink" title="? extends T 表示任何实现类型 T 的子类型范围"></a><code>? extends T</code> 表示任何实现类型 <code>T</code> 的子类型范围</h3><pre><code class="java">Building&lt;? extends Person&gt; building = new Building&lt;&gt;();
-// 编译错误，类型不兼容
-building.setPerson(new Student());
-// 允许
-Person person = building.getPerson();
+<h3 id="extends-T-表示任何实现类型-T-的子类型范围"><a href="#extends-T-表示任何实现类型-T-的子类型范围" class="headerlink" title="? extends T 表示任何实现类型 T 的子类型范围"></a><code>? extends T</code> 表示任何实现类型 <code>T</code> 的子类型范围</h3><pre><code class="java">List&lt;? extends Person&gt; list = new ArrayList&lt;&gt;();
+list.add(new Student()); // 编译错误，类型不兼容
+Person person = list.get(0); // 允许
 </code></pre>
-<p>因为 <code>building</code> 的类型参数是任何实现了 <code>Person</code> 类的子类，所以 <code>building</code> 可能是 <code>building&lt;Teacher&gt;</code>，也可能是 <code>building&lt;Student&gt;</code>，编译器并不知道可能传入的类型参数是什么，所以拒绝添加</p>
+<p>因为 <code>list</code> 的类型参数是任何实现了 <code>Person</code> 类的子类，所以 <code>list</code> 可能是 <code>List&lt;Teacher&gt;</code>，也可能是 <code>List&lt;Student&gt;</code>，编译器并不知道可能传入的类型参数是什么，所以拒绝添加</p>
 <p>但是你可以从中得到一个 <code>Person</code> 类型的对象，因为你得到的对象类型一定是 <code>Person</code> 类的子类</p>
-<h3 id="super-T-表示任何类型-T-的父类范围"><a href="#super-T-表示任何类型-T-的父类范围" class="headerlink" title="? super T 表示任何类型 T 的父类范围"></a><code>? super T</code> 表示任何类型 <code>T</code> 的父类范围</h3><pre><code class="java">Building&lt;? super Student&gt; classroom = new Building&lt;&gt;();
-// 允许
-classroom.setPerson(new Student());
-// 只能读取为 Object 类型
-Object person = classroom.getPerson();
+<h3 id="super-T-表示任何类型-T-的父类范围"><a href="#super-T-表示任何类型-T-的父类范围" class="headerlink" title="? super T 表示任何类型 T 的父类范围"></a><code>? super T</code> 表示任何类型 <code>T</code> 的父类范围</h3><pre><code class="java">List&lt;? super Person&gt; list = new ArrayList&lt;&gt;();
+list.add(new Student()); // 允许
+Object person = list.get(0); // 只能读取为 Object 类型
 </code></pre>
-<p>你可以往 <code>classroom</code> 里添加学生，因为 <code>classroom</code> 的类型参数一定是学生类的父类，父类引用指向子类对象是没有问题的</p>
-<p>但是你从 <code>classroom</code> 取出元素时，并不知道具体的父类是什么，唯一能保证的是Java中所有类的超类 <code>Object</code>，所以你只能从中取出 <code>Object</code> 类型的元素</p>
+<p>你可以往 <code>list</code> 里添加学生，因为 <code>list</code> 的类型参数一定是 <code>Student</code> 的父类，父类引用指向子类对象是没有问题的</p>
+<p>但是你从 <code>list</code> 取出元素时，并不知道具体的父类是什么，唯一能保证的是 Java 中所有类的超类 <code>Object</code>，所以你只能从中取出 <code>Object</code> 类型的元素</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
