@@ -2,16 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java 字段不参与多态性 | Checo 的小博客</title>
+  <title>Java 字段不参与多态性 | Checo&#39;s Blog</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java 字段不参与多态性 | Checo 的小博客">
+  <meta name="description" content="Java 字段不参与多态性 | Checo&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：12345678910111213141516DROP TABLE IF EXISTS &#96;order&#96;;CREATE TABLE &#96;order&#96;">
+<meta name="description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：DROP TABLE IF EXISTS &#96;order&#96;; CREATE TABLE &#96;order&#96; (   &#96;id&#96; int NOT NULL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MyBatis Plus延迟加载">
 <meta property="og:url" content="http://example.com/2023/10/16/MyBaits/2023-10-16_MyBatis%20Plus%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/index.html">
-<meta property="og:site_name" content="Checo 的小博客">
-<meta property="og:description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：12345678910111213141516DROP TABLE IF EXISTS &#96;order&#96;;CREATE TABLE &#96;order&#96;">
+<meta property="og:site_name" content="Checo&#39;s Blog">
+<meta property="og:description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：DROP TABLE IF EXISTS &#96;order&#96;; CREATE TABLE &#96;order&#96; (   &#96;id&#96; int NOT NULL">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-16T10:02:00.000Z">
 <meta property="article:modified_time" content="2025-04-12T13:25:13.438Z">
@@ -168,8 +168,6 @@
     </div>
     <div>
         
-        <a 
-                                           class="friends">友链</a>
         
     </div>
 </div>
@@ -378,13 +376,28 @@
       
         <h3 id="两个例子"><a href="#两个例子" class="headerlink" title="两个例子"></a>两个例子</h3><h4 id="例子一："><a href="#例子一：" class="headerlink" title="例子一："></a>例子一：</h4><ul>
 <li><p>父类：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Father</span><span class="params">()</span> &#123;</span><br><span class="line">        age = <span class="number">50</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Father</span> &#123;
+    <span class="type">int</span> age;
+        
+    <span class="keyword">public</span> <span class="title function_">Father</span><span class="params">()</span> &#123;
+        age = <span class="number">50</span>;
+    &#125;
+&#125;</code></pre>
 </li>
 <li><p>子类：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Son</span><span class="params">()</span> &#123;</span><br><span class="line">        age = <span class="number">25</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;
+    <span class="keyword">public</span> <span class="title function_">Son</span><span class="params">()</span> &#123;
+        age = <span class="number">25</span>;
+    &#125;
+&#125;</code></pre>
 </li>
 <li><p>多态的创建子类，看看年龄到底是多少：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();</span><br><span class="line">        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();
+        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);
+    &#125;
+&#125;</code></pre></li>
 </ul>
 <blockquote>
 <p>例子一的输出：<code>This guy&#39;s age is 25</code></p>
@@ -394,10 +407,19 @@
 <li><p>父类：同例子一</p>
 </li>
 <li><p>子类：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="comment">// 跟例子一相比多声明了一个父类同名字段</span></span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;
+    <span class="comment">// 跟例子一相比多声明了一个父类同名字段</span>
+    <span class="type">int</span> age;
+    ...
+&#125;</code></pre>
 </li>
 <li><p>同样是多态的创建子类，看看年龄是多少：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();</span><br><span class="line">        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();
+        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);
+    &#125;
+&#125;</code></pre></li>
 </ul>
 <blockquote>
 <p>例子二的输出：<code>This guy&#39;s age is 50</code></p>

@@ -2,16 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Java模拟CAS操作 | Checo 的小博客</title>
+  <title>Java模拟CAS操作 | Checo&#39;s Blog</title>
   <meta name="keywords" content="">
-  <meta name="description" content="Java模拟CAS操作 | Checo 的小博客">
+  <meta name="description" content="Java模拟CAS操作 | Checo&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：12345678910111213141516DROP TABLE IF EXISTS &#96;order&#96;;CREATE TABLE &#96;order&#96;">
+<meta name="description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：DROP TABLE IF EXISTS &#96;order&#96;; CREATE TABLE &#96;order&#96; (   &#96;id&#96; int NOT NULL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MyBatis Plus延迟加载">
 <meta property="og:url" content="http://example.com/2023/10/16/MyBaits/2023-10-16_MyBatis%20Plus%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/index.html">
-<meta property="og:site_name" content="Checo 的小博客">
-<meta property="og:description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：12345678910111213141516DROP TABLE IF EXISTS &#96;order&#96;;CREATE TABLE &#96;order&#96;">
+<meta property="og:site_name" content="Checo&#39;s Blog">
+<meta property="og:description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：DROP TABLE IF EXISTS &#96;order&#96;; CREATE TABLE &#96;order&#96; (   &#96;id&#96; int NOT NULL">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-16T10:02:00.000Z">
 <meta property="article:modified_time" content="2025-04-12T13:25:13.438Z">
@@ -168,8 +168,6 @@
     </div>
     <div>
         
-        <a 
-                                           class="friends">友链</a>
         
     </div>
 </div>
@@ -379,10 +377,60 @@
         <h2 id="在-Java-中模拟-CAS-Compare-And-Swap-操作"><a href="#在-Java-中模拟-CAS-Compare-And-Swap-操作" class="headerlink" title="在 Java 中模拟 CAS(Compare-And-Swap) 操作"></a>在 Java 中模拟 CAS(Compare-And-Swap) 操作</h2><h3 id="CAS-基本概念科普："><a href="#CAS-基本概念科普：" class="headerlink" title="CAS 基本概念科普："></a>CAS 基本概念科普：</h3><p>几乎所有的现代处理器中都包含了某种形式的原子读—改—写指令，例如比较并交换(Compare-And-Swap)，操作系统和 JVM 使用这些指令来实现锁和并发的数据结构。</p>
 <p>CAS指令包含三个操作数，需要读写的内存地址V，进行比较的旧值A和新值B，当且仅当V中存储的值等于A时，CAS才会通过原子的方式用B值更新V中存储的值，否则不会执行任何操作。</p>
 <p>无论V中存储的值等不等于A，都将返回V中现在存储的值，这种变化形式被称为比较并设置(Compare-And-Set)，无论操作是否成功都会返回</p>
-<h3 id="Java-代码模拟-CAS-操作"><a href="#Java-代码模拟-CAS-操作" class="headerlink" title="Java 代码模拟 CAS 操作"></a>Java 代码模拟 CAS 操作</h3><h4 id="CAS-类"><a href="#CAS-类" class="headerlink" title="CAS 类:"></a>CAS 类:</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 模拟 CAS 操作</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimulatedCAS</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SimulatedCAS</span><span class="params">(<span class="type">int</span> value)</span> &#123; <span class="built_in">this</span>.value = value; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">get</span><span class="params">()</span> &#123; <span class="keyword">return</span> value; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">compareAndSwap</span><span class="params">(<span class="type">int</span> expectedValue, <span class="type">int</span> newValue)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">oldValue</span> <span class="operator">=</span> value;</span><br><span class="line">        <span class="keyword">if</span> (oldValue == expectedValue)</span><br><span class="line">            value = newValue;</span><br><span class="line">        <span class="keyword">return</span> oldValue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">boolean</span> <span class="title function_">compareAndSet</span><span class="params">(<span class="type">int</span> expectedValue, <span class="type">int</span> newValue)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (expectedValue == compareAndSwap(expectedValue, newValue));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Java-代码模拟-CAS-操作"><a href="#Java-代码模拟-CAS-操作" class="headerlink" title="Java 代码模拟 CAS 操作"></a>Java 代码模拟 CAS 操作</h3><h4 id="CAS-类"><a href="#CAS-类" class="headerlink" title="CAS 类:"></a>CAS 类:</h4><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 模拟 CAS 操作</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimulatedCAS</span> &#123;
+    <span class="keyword">private</span> <span class="type">int</span> value;
 
-<h4 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;</span><br><span class="line">        <span class="type">SimulatedCAS</span> <span class="variable">cas</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimulatedCAS</span>(<span class="number">1</span>); <span class="comment">// 初始化 CAS 类中的值为 1</span></span><br><span class="line">        <span class="comment">// 开启 10 个线程竞争 CAS 操作，并且使用闭锁使得所有的线程同时开始执行</span></span><br><span class="line">        <span class="type">CountDownLatch</span> <span class="variable">startGate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    startGate.await();</span><br><span class="line">                    <span class="comment">// 将 CAS 中存储的值修改为 2</span></span><br><span class="line">                    <span class="keyword">if</span> (cas.compareAndSet(<span class="number">1</span>, <span class="number">2</span>)) System.out.println(Thread.currentThread().getName() + <span class="string">&quot; cas succeed&quot;</span>);</span><br><span class="line">                    <span class="keyword">else</span> System.out.println(Thread.currentThread().getName() + <span class="string">&quot; cas failed&quot;</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;);</span><br><span class="line">            t.start();</span><br><span class="line">        &#125;</span><br><span class="line">        startGate.countDown(); <span class="comment">// 使得 10 个线程同时开始竞争 CAS 操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="结果："><a href="#结果：" class="headerlink" title="结果："></a>结果：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread-6 cas succeed</span><br><span class="line">Thread-7 cas failed</span><br><span class="line">Thread-9 cas failed</span><br><span class="line">Thread-4 cas failed</span><br><span class="line">Thread-3 cas failed</span><br><span class="line">Thread-1 cas failed</span><br><span class="line">Thread-5 cas failed</span><br><span class="line">Thread-2 cas failed</span><br><span class="line">Thread-8 cas failed</span><br><span class="line">Thread-0 cas failed</span><br></pre></td></tr></table></figure>
+    <span class="keyword">public</span> <span class="title function_">SimulatedCAS</span><span class="params">(<span class="type">int</span> value)</span> &#123; <span class="built_in">this</span>.value = value; &#125;
+
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">get</span><span class="params">()</span> &#123; <span class="keyword">return</span> value; &#125;
+
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">compareAndSwap</span><span class="params">(<span class="type">int</span> expectedValue, <span class="type">int</span> newValue)</span> &#123;
+        <span class="type">int</span> <span class="variable">oldValue</span> <span class="operator">=</span> value;
+        <span class="keyword">if</span> (oldValue == expectedValue)
+            value = newValue;
+        <span class="keyword">return</span> oldValue;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">boolean</span> <span class="title function_">compareAndSet</span><span class="params">(<span class="type">int</span> expectedValue, <span class="type">int</span> newValue)</span> &#123;
+        <span class="keyword">return</span> (expectedValue == compareAndSwap(expectedValue, newValue));
+    &#125;
+&#125;</code></pre>
+
+<h4 id="测试："><a href="#测试：" class="headerlink" title="测试："></a>测试：</h4><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;
+        <span class="type">SimulatedCAS</span> <span class="variable">cas</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimulatedCAS</span>(<span class="number">1</span>); <span class="comment">// 初始化 CAS 类中的值为 1</span>
+        <span class="comment">// 开启 10 个线程竞争 CAS 操作，并且使用闭锁使得所有的线程同时开始执行</span>
+        <span class="type">CountDownLatch</span> <span class="variable">startGate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">1</span>);
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;
+            <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+                <span class="keyword">try</span> &#123;
+                    startGate.await();
+                    <span class="comment">// 将 CAS 中存储的值修改为 2</span>
+                    <span class="keyword">if</span> (cas.compareAndSet(<span class="number">1</span>, <span class="number">2</span>)) System.out.println(Thread.currentThread().getName() + <span class="string">&quot; cas succeed&quot;</span>);
+                    <span class="keyword">else</span> System.out.println(Thread.currentThread().getName() + <span class="string">&quot; cas failed&quot;</span>);
+                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+                &#125;
+
+            &#125;);
+            t.start();
+        &#125;
+        startGate.countDown(); <span class="comment">// 使得 10 个线程同时开始竞争 CAS 操作</span>
+    &#125;
+&#125;</code></pre>
+<h4 id="结果："><a href="#结果：" class="headerlink" title="结果："></a>结果：</h4><pre><code class="highlight apache"><span class="attribute">Thread</span>-<span class="number">6</span> cas succeed
+<span class="attribute">Thread</span>-<span class="number">7</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">9</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">4</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">3</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">1</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">5</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">2</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">8</span> cas failed
+<span class="attribute">Thread</span>-<span class="number">0</span> cas failed</code></pre>
 
 <p>可以看到，10 个同时开始 CAS 操作的线程，只有一个会成功，其他都失败，多跑几次，成功的线程可能都是不同的。</p>
 
