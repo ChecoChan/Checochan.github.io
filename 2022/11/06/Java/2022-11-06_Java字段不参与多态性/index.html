@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Java 字段不参与多态性 | Checo的小博客</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="Java 字段不参与多态性 | Checo的小博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：12345678910111213141516DROP TABLE IF EXISTS &#96;order&#96;;CREATE TABLE &#96;order&#96;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis Plus延迟加载">
+<meta property="og:url" content="http://example.com/2023/10/16/MyBaits/2023-10-16_MyBatis%20Plus%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/index.html">
+<meta property="og:site_name" content="Checo的小博客">
+<meta property="og:description" content="MyBatis Plus延迟加载MyBatis Plus延迟加载：MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。 假设有两个用户表 order 和 user：12345678910111213141516DROP TABLE IF EXISTS &#96;order&#96;;CREATE TABLE &#96;order&#96;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-16T10:02:00.000Z">
+<meta property="article:modified_time" content="2025-04-12T13:25:13.438Z">
+<meta property="article:author" content="Checo">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/darcula.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>Checo</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/ChecoChan"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="weibo"
+               href="https://weibo.com/u/5888573229"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-weibo"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="email"
+               href="mailto:xiaozong_chan@163.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="neteasemusic"
+               href="https://music.163.com/#/user/home?id=130012523"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-neteasemusic"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(8)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="Java">
+            
+            Java
+            <small>(7)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="MyBais">
+            
+            MyBais
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+    </div>
+    <div>
+        
+        <a 
+                                           class="friends">友链</a>
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="8">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+    </div>
+
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 MyBais "
+           href="/2023/10/16/MyBaits/2023-10-16_MyBatis%20Plus%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="MyBatis Plus延迟加载">MyBatis Plus延迟加载</span>
+            <span class="post-date" title="2023-10-16 18:02:00">2023/10/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2023/09/21/Java/2023-9-21_Java%E6%A8%A1%E6%8B%9FCAS%E6%93%8D%E4%BD%9C/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java模拟CAS操作">Java模拟CAS操作</span>
+            <span class="post-date" title="2023-09-21 16:48:00">2023/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2023/05/07/Java/2023-05-07_Java%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java中实现线程的方式">Java中实现线程的方式</span>
+            <span class="post-date" title="2023-05-07 18:18:00">2023/05/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2023/05/07/Java/2023-05-07_Java%E7%9A%84Runnable%E3%80%81Callable%E3%80%81Executor%E5%92%8CFuture%E7%9A%84%E5%85%B3%E7%B3%BB%E5%92%8C%E4%BD%BF%E7%94%A8%E4%BE%8B%E5%AD%90/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子">Java 的 Runnable、Callable、Executor 和 Future 的关系和使用例子</span>
+            <span class="post-date" title="2023-05-07 17:28:00">2023/05/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2023/05/06/Java/2023-05-06_Java%E7%9A%84%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90%E4%BF%AE%E9%A5%B0%E7%AC%A6/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java 的访问权限修饰符">Java 的访问权限修饰符</span>
+            <span class="post-date" title="2023-05-06 18:25:00">2023/05/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2023/03/10/Java/2023-03-10_Java%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E7%B1%BB%E5%9E%8B%E9%99%90%E5%AE%9A/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java 通配符类型的限定">Java 通配符类型的限定</span>
+            <span class="post-date" title="2023-03-10 15:22:00">2023/03/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2022/11/06/Java/2022-11-06_Java%E5%AD%97%E6%AE%B5%E4%B8%8D%E5%8F%82%E4%B8%8E%E5%A4%9A%E6%80%81%E6%80%A7/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java 字段不参与多态性">Java 字段不参与多态性</span>
+            <span class="post-date" title="2022-11-06 21:45:00">2022/11/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 Java "
+           href="/2022/09/25/Java/2022-09-25_Java%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Java 方法参数的作用">Java 方法参数的作用</span>
+            <span class="post-date" title="2022-09-25 20:30:00">2022/09/25</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-Java/2022-11-06_Java字段不参与多态性" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">Java 字段不参与多态性</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Java">Java</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2025-04-12 21:25:13'>2022-11-06 21:45</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-text">两个例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%B8%80%EF%BC%9A"><span class="toc-text">例子一：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90%E4%BA%8C%EF%BC%9A"><span class="toc-text">例子二：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5%E4%B8%8D%E5%8F%82%E4%B8%8E%E5%A4%9A%E6%80%81%E6%80%A7"><span class="toc-text">字段不参与多态性</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="两个例子"><a href="#两个例子" class="headerlink" title="两个例子"></a>两个例子</h3><h4 id="例子一："><a href="#例子一：" class="headerlink" title="例子一："></a>例子一：</h4><ul>
+<li><p>父类：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Father</span><span class="params">()</span> &#123;</span><br><span class="line">        age = <span class="number">50</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>子类：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Son</span><span class="params">()</span> &#123;</span><br><span class="line">        age = <span class="number">25</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>多态的创建子类，看看年龄到底是多少：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();</span><br><span class="line">        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>例子一的输出：<code>This guy&#39;s age is 25</code></p>
+</blockquote>
+<p>很合理对吧？毕竟以前学Java SE的时候，不管是视频还是书里，都是说编译看左边，运行看右边，即父类变量的引用( <code>guy</code> )指向了子类对象( <code>Son</code> )，那么代码访问子类的年龄，自然是输出 <code>25</code></p>
+<h4 id="例子二："><a href="#例子二：" class="headerlink" title="例子二："></a>例子二：</h4><ul>
+<li><p>父类：同例子一</p>
+</li>
+<li><p>子类：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="comment">// 跟例子一相比多声明了一个父类同名字段</span></span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同样是多态的创建子类，看看年龄是多少：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();</span><br><span class="line">        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>例子二的输出：<code>This guy&#39;s age is 50</code></p>
+</blockquote>
+<p>奇怪，明明在子类构造方法中给子类 <code>age</code> 初始化为了 <code>25</code> ，怎么输出是 <code>50</code> ？</p>
+<h3 id="字段不参与多态性"><a href="#字段不参与多态性" class="headerlink" title="字段不参与多态性"></a>字段不参与多态性</h3><blockquote>
+<p>字段永远不会参与多态，当子类声明父类的同名字段时，虽然在子类的内存中两个字段都会存在，但是子类的字段会遮蔽父类的同名字段</p>
+</blockquote>
+<p>什么意思呢？假设将在父类继承而来的 <code>age</code> 字段叫做 <code>ageF</code> ，而子类中声明的 <code>age</code> 字段叫做 <code>ageS</code> ，虽然内存中这两个字段都会存在，但是子类的字段遮蔽了父类的同名字段，所以子类的构造方法中实际上是对 <code>ageS</code> 进行了初始化，但是通过多态创建的子类对象时，<code>guy.age</code> 访问的却是 <code>ageF</code> ，这就是为什么例子二的年龄输出是 <code>50</code> 而不是 <code>25</code>。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    Checo Chan
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+        /* 渲染*/
+        function HTMLDecode(text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+        if (window.mermaid){
+            window.mermaid = null
+        }
+        $.getScript("//cdn.jsdelivr.net/npm/mermaid@8.4.2/dist/mermaid.min.js", function () {
+            var mermaidOptions = JSON.parse(HTMLDecode("{&#34;theme&#34;:&#34;default&#34;,&#34;startOnLoad&#34;:true,&#34;flowchart&#34;:{&#34;useMaxWidth&#34;:false,&#34;htmlLabels&#34;:true}}"))
+            if (window.mermaid) {
+                mermaid.initialize(mermaidOptions)
+                mermaid.contentLoaded()
+            }
+        })
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
