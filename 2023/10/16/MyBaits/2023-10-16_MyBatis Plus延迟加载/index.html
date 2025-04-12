@@ -172,7 +172,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="8">
-
+<input type="hidden" id="yelog_site_word_count" value="5.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -341,6 +341,8 @@
     </div>
     <div class="article-meta">
         
+        <span>字数:532</span>
+        
         
         <span id="busuanzi_container_page_pv">
             阅读 :<span id="busuanzi_value_page_pv">
@@ -375,96 +377,96 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="MyBatis-Plus延迟加载"><a href="#MyBatis-Plus延迟加载" class="headerlink" title="MyBatis Plus延迟加载"></a>MyBatis Plus延迟加载</h2><h3 id="MyBatis-Plus延迟加载："><a href="#MyBatis-Plus延迟加载：" class="headerlink" title="MyBatis Plus延迟加载："></a>MyBatis Plus延迟加载：</h3><p>MyBatis&#x2F;MyBatis Plus 是支持延迟加载的，默认没有开启，需要手动开启，以 MyBatis Plus 为例作为演示。</p>
-<h4 id="假设有两个用户表-order-和-user："><a href="#假设有两个用户表-order-和-user：" class="headerlink" title="假设有两个用户表 order 和 user："></a>假设有两个用户表 <code>order</code> 和 <code>user</code>：</h4><pre><code class="highlight sql"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> `<span class="keyword">order</span>`;
-<span class="keyword">CREATE TABLE</span> `<span class="keyword">order</span>` (
-  `id` <span class="type">int</span> <span class="keyword">NOT NULL</span> AUTO_INCREMENT,
-  `user_id` <span class="type">int</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
-  `order_content` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span>,
-  <span class="keyword">PRIMARY KEY</span> (`id`)
-) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">3</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_000_ai_ci;
-<span class="keyword">INSERT INTO</span> `<span class="keyword">order</span>` <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="number">1</span>,<span class="string">&#x27;computer&#x27;</span>),(<span class="number">2</span>,<span class="number">1</span>,<span class="string">&#x27;phone&#x27;</span>);
+<h4 id="假设有两个用户表-order-和-user："><a href="#假设有两个用户表-order-和-user：" class="headerlink" title="假设有两个用户表 order 和 user："></a>假设有两个用户表 <code>order</code> 和 <code>user</code>：</h4><pre><code class="language-sql">DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `order_content` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_000_ai_ci;
+INSERT INTO `order` VALUES (1,1,&#39;computer&#39;),(2,1,&#39;phone&#39;);
 
-<span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> `<span class="keyword">user</span>`;
-<span class="keyword">CREATE TABLE</span> `<span class="keyword">user</span>` (
-  `id` <span class="type">int</span> <span class="keyword">NOT NULL</span> AUTO_INCREMENT,
-  `name` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT NULL</span>,
-  <span class="keyword">PRIMARY KEY</span> (`id`)
-) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">2</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci;
-<span class="keyword">INSERT INTO</span> `<span class="keyword">user</span>` <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;Jack&#x27;</span>);</code></pre>
-
-<h4 id="实体类-Order-和-User："><a href="#实体类-Order-和-User：" class="headerlink" title="实体类 Order 和 User："></a>实体类 <code>Order</code> 和 <code>User</code>：</h4><pre><code class="highlight java"><span class="meta">@Data</span>
-<span class="meta">@TableName(value =&quot;order&quot;)</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Order</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;
-    <span class="keyword">private</span> Integer id;
-    <span class="keyword">private</span> Integer userId;
-    <span class="keyword">private</span> String orderContent;
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+INSERT INTO `user` VALUES (1,&#39;Jack&#39;);
+</code></pre>
+<h4 id="实体类-Order-和-User："><a href="#实体类-Order-和-User：" class="headerlink" title="实体类 Order 和 User："></a>实体类 <code>Order</code> 和 <code>User</code>：</h4><pre><code class="language-java">@Data
+@TableName(value =&quot;order&quot;)
+public class Order implements Serializable &#123;
+    private Integer id;
+    private Integer userId;
+    private String orderContent;
 &#125;
 
-<span class="meta">@Data</span>
-<span class="meta">@TableName(value =&quot;user&quot;)</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;
-    <span class="keyword">private</span> Integer id;
-    <span class="keyword">private</span> String name;
-    <span class="meta">@TableField(exist = false)</span>
-    <span class="keyword">private</span> List&lt;Order&gt; orderList;
-&#125;</code></pre>
-
-<h4 id="Mapper接口："><a href="#Mapper接口：" class="headerlink" title="Mapper接口："></a>Mapper接口：</h4><pre><code class="highlight java"><span class="meta">@Mapper</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OrderMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;Order&gt; &#123;
-    <span class="meta">@Select(&quot;select o.id, o.user_id, o.order_content from `order` o where user_id = #&#123;userId&#125;&quot;)</span>
-    List&lt;Order&gt; <span class="title function_">getOrderListByUserId</span><span class="params">(<span class="meta">@Param(&quot;userId&quot;)</span> Integer userId)</span>;
+@Data
+@TableName(value =&quot;user&quot;)
+public class User implements Serializable &#123;
+    private Integer id;
+    private String name;
+    @TableField(exist = false)
+    private List&lt;Order&gt; orderList;
+&#125;
+</code></pre>
+<h4 id="Mapper接口："><a href="#Mapper接口：" class="headerlink" title="Mapper接口："></a>Mapper接口：</h4><pre><code class="language-java">@Mapper
+public interface OrderMapper extends BaseMapper&lt;Order&gt; &#123;
+    @Select(&quot;select o.id, o.user_id, o.order_content from `order` o where user_id = #&#123;userId&#125;&quot;)
+    List&lt;Order&gt; getOrderListByUserId(@Param(&quot;userId&quot;) Integer userId);
 &#125;
 
-<span class="meta">@Mapper</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;User&gt; &#123;
-    <span class="meta">@Select(&quot;select u.id, u.name from `user` u where id = #&#123;id&#125;&quot;)</span>
-    <span class="meta">@Results(&#123;</span>
-<span class="meta">            @Result(property = &quot;orderList&quot;,</span>
-<span class="meta">                    column = &quot;id&quot;,</span>
-<span class="meta">                    javaType = List.class,</span>
-<span class="meta">                    many = @Many(select = &quot;com.checo.mapper.OrderMapper.getOrderListByUserId&quot;,</span>
-<span class="meta">                            fetchType = FetchType.LAZY)) // fetchType = FetchType.LAZY 即开启延迟加载</span>
-<span class="meta">    &#125;)</span>
-    User <span class="title function_">getUserById</span><span class="params">(<span class="meta">@Param(&quot;id&quot;)</span> Integer id)</span>;
-&#125;</code></pre>
+@Mapper
+public interface UserMapper extends BaseMapper&lt;User&gt; &#123;
+    @Select(&quot;select u.id, u.name from `user` u where id = #&#123;id&#125;&quot;)
+    @Results(&#123;
+            @Result(property = &quot;orderList&quot;,
+                    column = &quot;id&quot;,
+                    javaType = List.class,
+                    many = @Many(select = &quot;com.checo.mapper.OrderMapper.getOrderListByUserId&quot;,
+                            fetchType = FetchType.LAZY)) // fetchType = FetchType.LAZY 即开启延迟加载
+    &#125;)
+    User getUserById(@Param(&quot;id&quot;) Integer id);
+&#125;
+</code></pre>
+<h4 id="添加配置，让我们可以看到-SQL-执行日志："><a href="#添加配置，让我们可以看到-SQL-执行日志：" class="headerlink" title="添加配置，让我们可以看到 SQL 执行日志："></a>添加配置，让我们可以看到 SQL 执行日志：</h4><pre><code class="language-yaml">mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+</code></pre>
+<h4 id="测试延迟加载："><a href="#测试延迟加载：" class="headerlink" title="测试延迟加载："></a>测试延迟加载：</h4><pre><code class="language-java">@SpringBootTest
+class SpringBootDemoApplicationTests &#123;
+    @Autowired
+    private UserMapper userMapper;
 
-<h4 id="添加配置，让我们可以看到-SQL-执行日志："><a href="#添加配置，让我们可以看到-SQL-执行日志：" class="headerlink" title="添加配置，让我们可以看到 SQL 执行日志："></a>添加配置，让我们可以看到 SQL 执行日志：</h4><pre><code class="highlight yaml"><span class="attr">mybatis-plus:</span>
-  <span class="attr">configuration:</span>
-    <span class="attr">map-underscore-to-camel-case:</span> <span class="literal">true</span>
-    <span class="attr">log-impl:</span> <span class="string">org.apache.ibatis.logging.stdout.StdOutImpl</span></code></pre>
-
-<h4 id="测试延迟加载："><a href="#测试延迟加载：" class="headerlink" title="测试延迟加载："></a>测试延迟加载：</h4><pre><code class="highlight java"><span class="meta">@SpringBootTest</span>
-<span class="keyword">class</span> <span class="title class_">SpringBootDemoApplicationTests</span> &#123;
-    <span class="meta">@Autowired</span>
-    <span class="keyword">private</span> UserMapper userMapper;
-
-    <span class="meta">@Test</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testMyBatisPlusLazy</span><span class="params">()</span> &#123;
-        <span class="type">User</span> <span class="variable">jack</span> <span class="operator">=</span> userMapper.getUserById(<span class="number">1</span>);
+    @Test
+    public void testMyBatisPlusLazy() &#123;
+        User jack = userMapper.getUserById(1);
         System.out.println(jack.getName());
-        System.out.println(<span class="string">&quot;--------------&quot;</span>);
+        System.out.println(&quot;--------------&quot;);
         List&lt;Order&gt; orderList = jack.getOrderList();
         System.out.println(orderList);
     &#125;
-&#125;</code></pre>
-
-<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><pre><code class="highlight pgsql">==&gt;  Preparing: <span class="keyword">select</span> u.id, u.name <span class="keyword">from</span> `<span class="keyword">user</span>` u <span class="keyword">where</span> id = ?
-==&gt; Parameters: <span class="number">1</span>(<span class="type">Integer</span>)
-&lt;==    <span class="keyword">Columns</span>: id, <span class="type">name</span>
-&lt;==        <span class="keyword">Row</span>: <span class="number">1</span>, Jack
-&lt;==      Total: <span class="number">1</span>
-Closing non transactional SqlSession [org.apache.ibatis.<span class="keyword">session</span>.defaults.DefaultSqlSession@<span class="number">149</span>b0577]
+&#125;
+</code></pre>
+<h4 id="运行结果："><a href="#运行结果：" class="headerlink" title="运行结果："></a>运行结果：</h4><pre><code>==&gt;  Preparing: select u.id, u.name from `user` u where id = ?
+==&gt; Parameters: 1(Integer)
+&lt;==    Columns: id, name
+&lt;==        Row: 1, Jack
+&lt;==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@149b0577]
 Jack
-<span class="comment">------- 分割线 -------</span>
-JDBC <span class="keyword">Connection</span> [HikariProxyConnection@<span class="number">993343057</span> wrapping com.mysql.cj.jdbc.ConnectionImpl@<span class="number">5</span>ec1963c] will <span class="keyword">not</span> be managed <span class="keyword">by</span> Spring
-==&gt;  Preparing: <span class="keyword">select</span> o.id, o.user_id, o.order_content <span class="keyword">from</span> `<span class="keyword">order</span>` o <span class="keyword">where</span> user_id = ?
-==&gt; Parameters: <span class="number">1</span>(<span class="type">Integer</span>)
-&lt;==    <span class="keyword">Columns</span>: id, user_id, order_content
-&lt;==        <span class="keyword">Row</span>: <span class="number">1</span>, <span class="number">1</span>, computer
-&lt;==        <span class="keyword">Row</span>: <span class="number">2</span>, <span class="number">1</span>, phone
-&lt;==      Total: <span class="number">2</span>
-[<span class="keyword">Order</span>(id=<span class="number">1</span>, userId=<span class="number">1</span>, orderContent=computer), <span class="keyword">Order</span>(id=<span class="number">2</span>, userId=<span class="number">1</span>, orderContent=phone)]</code></pre>
-
+------- 分割线 -------
+JDBC Connection [HikariProxyConnection@993343057 wrapping com.mysql.cj.jdbc.ConnectionImpl@5ec1963c] will not be managed by Spring
+==&gt;  Preparing: select o.id, o.user_id, o.order_content from `order` o where user_id = ?
+==&gt; Parameters: 1(Integer)
+&lt;==    Columns: id, user_id, order_content
+&lt;==        Row: 1, 1, computer
+&lt;==        Row: 2, 1, phone
+&lt;==      Total: 2
+[Order(id=1, userId=1, orderContent=computer), Order(id=2, userId=1, orderContent=phone)]
+</code></pre>
 <p>可以看出，在执行 <code>jack.getOrderList()</code> 时，才执行的订单查询，即实现了延迟加载。</p>
 
       
@@ -632,16 +634,6 @@ JDBC <span class="keyword">Connection</span> [HikariProxyConnection@<span class=
     /*文章列表背景图*/
     
 
-    
-    #post .pjax article :not(pre) > code {
-        color: #24292e;
-        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
-        background-color: rgba(27,31,35,.05);
-        border-radius: 3px;
-        font-size: 85%;
-        margin: 0;
-        padding: .2em .4em;
-    }
     
 </style>
 

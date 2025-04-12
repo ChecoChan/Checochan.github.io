@@ -172,7 +172,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="8">
-
+<input type="hidden" id="yelog_site_word_count" value="5.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -341,6 +341,8 @@
     </div>
     <div class="article-meta">
         
+        <span>字数:488</span>
+        
         
         <span id="busuanzi_container_page_pv">
             阅读 :<span id="busuanzi_value_page_pv">
@@ -376,28 +378,32 @@
       
         <h3 id="两个例子"><a href="#两个例子" class="headerlink" title="两个例子"></a>两个例子</h3><h4 id="例子一："><a href="#例子一：" class="headerlink" title="例子一："></a>例子一：</h4><ul>
 <li><p>父类：</p>
-  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Father</span> &#123;
-    <span class="type">int</span> age;
+<pre><code class="language-java">public class Father &#123;
+    int age;
         
-    <span class="keyword">public</span> <span class="title function_">Father</span><span class="params">()</span> &#123;
-        age = <span class="number">50</span>;
+    public Father() &#123;
+        age = 50;
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 </li>
 <li><p>子类：</p>
-  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;
-    <span class="keyword">public</span> <span class="title function_">Son</span><span class="params">()</span> &#123;
-        age = <span class="number">25</span>;
+<pre><code class="language-java">public class Son extends Father &#123;
+    public Son() &#123;
+        age = 25;
     &#125;
-&#125;</code></pre>
+&#125;
+</code></pre>
 </li>
 <li><p>多态的创建子类，看看年龄到底是多少：</p>
-  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();
-        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);
+<pre><code class="language-java">public class FieldHasNoPolymorphic &#123;
+    public static void main(String[] args) &#123;
+        Father guy = new Son();
+        System.out.println(&quot;This guy&#39;s age is &quot; + guy.age);
     &#125;
-&#125;</code></pre></li>
+&#125;
+</code></pre>
+</li>
 </ul>
 <blockquote>
 <p>例子一的输出：<code>This guy&#39;s age is 25</code></p>
@@ -407,19 +413,22 @@
 <li><p>父类：同例子一</p>
 </li>
 <li><p>子类：</p>
-  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;
-    <span class="comment">// 跟例子一相比多声明了一个父类同名字段</span>
-    <span class="type">int</span> age;
+<pre><code class="language-java">public class Son extends Father &#123;
+    // 跟例子一相比多声明了一个父类同名字段
+    int age;
     ...
-&#125;</code></pre>
+&#125;
+</code></pre>
 </li>
 <li><p>同样是多态的创建子类，看看年龄是多少：</p>
-  <pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldHasNoPolymorphic</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">Father</span> <span class="variable">guy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();
-        System.out.println(<span class="string">&quot;This guy&#x27;s age is &quot;</span> + guy.age);
+<pre><code class="language-java">public class FieldHasNoPolymorphic &#123;
+    public static void main(String[] args) &#123;
+        Father guy = new Son();
+        System.out.println(&quot;This guy&#39;s age is &quot; + guy.age);
     &#125;
-&#125;</code></pre></li>
+&#125;
+</code></pre>
+</li>
 </ul>
 <blockquote>
 <p>例子二的输出：<code>This guy&#39;s age is 50</code></p>
@@ -595,16 +604,6 @@
     /*文章列表背景图*/
     
 
-    
-    #post .pjax article :not(pre) > code {
-        color: #24292e;
-        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
-        background-color: rgba(27,31,35,.05);
-        border-radius: 3px;
-        font-size: 85%;
-        margin: 0;
-        padding: .2em .4em;
-    }
     
 </style>
 
